@@ -1,0 +1,6 @@
+{
+    "gremlin.graph":"org.apache.hugegraph.auth.HugeFactoryAuthProxy",
+    "backend":"rocksdb",
+    "serializer":"binary",
+    "store":"hugegraph2"
+    }

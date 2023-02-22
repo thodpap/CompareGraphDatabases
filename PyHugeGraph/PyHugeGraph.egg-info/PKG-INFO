@@ -1,0 +1,21 @@
+Metadata-Version: 2.1
+Name: PyHugeGraph
+Version: 0.1.0
+Summary: HugeGraph Python API Package
+Home-page: https://github.com/tanglion/PyHugeGraph
+Author: tanglion
+Author-email: tanglion1987@163.com
+License: MIT
+Description: 
+        # PyHugeGraph
+        python API  for hugegraph database
+        
+Platform: UNKNOWN
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Requires-Python: >=2.7
+Description-Content-Type: text/markdown
