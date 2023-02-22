@@ -1,6 +1,6 @@
 import requests
 
-query = "g.V('1')"
+query = "g.addV('person').property('name','\"11\"')"
 
 response = requests.post(
     url="http://localhost:8080/graphs/node_10/jobs/gremlin",
