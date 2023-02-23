@@ -1,6 +1,6 @@
 from PyHugeGraph import PyHugeGraphClient
 
-hg = PyHugeGraphClient.HugeGraphClient("http://localhost", "8080", "node_100")
+hg = PyHugeGraphClient.HugeGraphClient("http://localhost", "8081", "node_100")
 
 print(hg.create_property_key(propertykey_name="name", dataType="TEXT", cardinality="SINGLE").response)
 print(hg.create_property_key(propertykey_name="age", dataType="INT", cardinality="SINGLE").response)

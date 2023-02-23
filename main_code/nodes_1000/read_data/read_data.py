@@ -18,13 +18,13 @@ def read_edges(hg, NUMBER_OF_VERTICES):
     for i in range(1, NUMBER_OF_VERTICES+1):
 
         time_before_edge_1 = time.time()
-        res = hg.get_edge_by_condition(vertex_id=f"\"{i}\"", direction="OUT", label="relationship")
+        res = hg.get_edge_by_condition(vertex_id=f"\"1:{i}\"", direction="OUT", label="relationship")
         assert res.status_code == 200, f"Could not read edge starting from vertex {i}." 
         edges = eval(res.response)
         time_after_edge_1 = time.time()
 
-        max_edge = max(max_edge, time_after_edge_1 - time_before_edge_1)
-        min_edge = min(min_edge, time_after_edge_1 - time_before_edge_1)
+        max_edge = max(max_edge, (time_after_edge_1 - time_before_edge_1)/len(edges["edges"]))
+        min_edge = min(min_edge, (time_after_edge_1 - time_before_edge_1)/len(edges["edges"]))
         mean_edge += time_after_edge_1 - time_before_edge_1
 
         counter += len(edges["edges"])
@@ -48,7 +48,7 @@ def read_vertices(hg, NUMBER_OF_VERTICES):
     for i in range(1, NUMBER_OF_VERTICES+1):
 
         time_before_vertex_1 = time.time()
-        res = hg.get_vertex_by_id(vertex_id=f"{i}")
+        res = hg.get_vertex_by_id(vertex_id=f"1:{i}")
         assert res.status_code == 200, f"Could not read vertex {i}." 
         time_after_vertex_1 = time.time()
         max_vertex = max(max_vertex, time_after_vertex_1 - time_before_vertex_1)

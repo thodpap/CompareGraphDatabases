@@ -1,9 +1,9 @@
 import requests
 
-query = "g.addV('person').property('name','\"11\"')"
+query = "node_10.traversal().V('1:10')"
 
 response = requests.post(
-    url="http://localhost:8080/graphs/node_10/jobs/gremlin",
+    url="http://localhost:8081/graphs/node_10/jobs/gremlin",
     headers={"Content-Type": "application/json", "Accept": "application/json"},
     json={
         "gremlin": query,

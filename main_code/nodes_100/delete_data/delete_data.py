@@ -18,7 +18,7 @@ def delete_edges(hg, NUMBER_OF_VERTICES):
     for i in range(1, NUMBER_OF_VERTICES+1):
 
         
-        edges = eval(hg.get_edge_by_condition(vertex_id=f"\"{i}\"", direction="OUT", label="relationship").response)
+        edges = eval(hg.get_edge_by_condition(vertex_id=f"\"1:{i}\"", direction="OUT", label="relationship").response)
 
         data_ = edges["edges"]
         counter += len(data_)
@@ -56,7 +56,7 @@ def delete_vertices(hg, NUMBER_OF_VERTICES):
     for i in range(1, NUMBER_OF_VERTICES+1):
 
         time_before_vertex_1 = time.time()
-        res = hg.delete_vertex_by_id(vertex_id=f"{i}")
+        res = hg.delete_vertex_by_id(vertex_id=f"1:{i}")
         assert res.status_code == 204, f"Could not delete vertex {i}." 
         time_after_vertex_1 = time.time()
         max_vertex = max(max_vertex, time_after_vertex_1 - time_before_vertex_1)

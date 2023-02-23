@@ -3,7 +3,7 @@ import requests
 query = "g.V('1')"
 
 response = requests.post(
-    url="http://localhost:8080/graphs/node_100/jobs/gremlin",
+    url="http://localhost:8081/graphs/node_100/jobs/gremlin",
     headers={"Content-Type": "application/json", "Accept": "application/json"},
     json={
         "gremlin": query,

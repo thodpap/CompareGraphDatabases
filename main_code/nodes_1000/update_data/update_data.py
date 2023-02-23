@@ -17,7 +17,7 @@ def update_edges(hg, NUMBER_OF_VERTICES):
 
     for i in range(1, NUMBER_OF_VERTICES+1):
 
-        edges = eval(hg.get_edge_by_condition(vertex_id=f"\"{i}\"", direction="OUT", label="relationship").response)
+        edges = eval(hg.get_edge_by_condition(vertex_id=f"\"1:{i}\"", direction="OUT", label="relationship").response)
         
         data_ = edges["edges"]
         counter += len(data_)
@@ -57,7 +57,7 @@ def update_vertices(hg, NUMBER_OF_VERTICES):
 
         rand_1 = random.randint(1, 100)
         time_before_vertex_1 = time.time()
-        res = hg.update_vertex_properties(vertex_id=f"\"{i}\"", label="person", properties={"age":rand_1})
+        res = hg.update_vertex_properties(vertex_id=f"\"1:{i}\"", label="person", properties={"age":rand_1})
         assert res.status_code == 200, f"Could not update vertex {i}." 
         time_after_vertex_1 = time.time()
         max_vertex = max(max_vertex, time_after_vertex_1 - time_before_vertex_1)
