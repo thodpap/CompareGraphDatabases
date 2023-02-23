@@ -21,6 +21,7 @@ def insert_data(lines, hg):
     max_edge = 0
     min_edge = 1000000000000
 
+    initial_time = time.time()
     for line in lines[2:]:
         
         line = line.replace("\n","")
@@ -103,7 +104,8 @@ def insert_data(lines, hg):
             "max_edge": max_edge,
             "min_edge": min_edge,
             "number_of_edges": counter_edges
-        }
+        },
+        "total_time": time.time() - initial_time
     }
 
 if __name__ == "__main__":

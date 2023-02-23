@@ -15,9 +15,8 @@ def delete_edges(hg, NUMBER_OF_VERTICES):
     max_edge = 0
     min_edge = 1000000000000
     
-    for i in range(1, NUMBER_OF_VERTICES+1):
-
-        
+    initial_time = time.time()
+    for i in range(1, NUMBER_OF_VERTICES+1):        
         edges = eval(hg.get_edge_by_condition(vertex_id=f"\"1:{i}\"", direction="OUT", label="relationship").response)
 
         data_ = edges["edges"]
@@ -39,6 +38,7 @@ def delete_edges(hg, NUMBER_OF_VERTICES):
         "mean_edge": mean_edge/counter,
         "max_edge": max_edge,
         "min_edge": min_edge,
+        "total_time": time.time() - initial_time
     }
 
 
@@ -53,6 +53,7 @@ def delete_vertices(hg, NUMBER_OF_VERTICES):
     max_vertex = 0
     min_vertex = 1000000000000
 
+    initial_time = time.time()
     for i in range(1, NUMBER_OF_VERTICES+1):
 
         time_before_vertex_1 = time.time()
@@ -67,6 +68,7 @@ def delete_vertices(hg, NUMBER_OF_VERTICES):
         "mean_vertex": mean_vertex/counter,
         "max_vertex": max_vertex,
         "min_vertex": min_vertex,
+        "total_time": time.time() - initial_time
     }
 
 

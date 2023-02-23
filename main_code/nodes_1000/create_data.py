@@ -1,6 +1,6 @@
 import random
 
-# max connections: ((n-1)*(n)/2) = ...
+# max connections: ((n-1)*(n-2)/2) = 9*8/2 = 36
 
 f = open("10_nodes.txt", 'w')
 f.write("\n\n")
@@ -8,7 +8,7 @@ myset = set()
 
 NUM_OF_CONNECTIONS = 30
 
-for i in range(NUM_OF_CONNECTIONS):
+for k in range(NUM_OF_CONNECTIONS):
 
     i = None
     j = None

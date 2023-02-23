@@ -1,9 +1,9 @@
 import requests
 
-query = "g.V('1')"
+query = "node_10.traversal().V('1:10')"
 
 response = requests.post(
-    url="http://localhost:8081/graphs/node_1000/jobs/gremlin",
+    url="http://localhost:8081/graphs/node_10/jobs/gremlin",
     headers={"Content-Type": "application/json", "Accept": "application/json"},
     json={
         "gremlin": query,
