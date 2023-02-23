@@ -29,7 +29,7 @@ def delete_edges(hg, NUMBER_OF_VERTICES):
             id = edge['id']
             time_before_edge_1 = time.time()
             res = hg.delete_edge_by_id(id)
-            assert res.status_code == 204, "Could not delete edge " + id + "."
+            assert res.status_code == 204, "Could not delete edge " + id + f" with error {res.response}."
             time_after_edge_1 = time.time()
             max_edge = max(max_edge, time_after_edge_1 - time_before_edge_1)
             min_edge = min(min_edge, time_after_edge_1 - time_before_edge_1)
@@ -60,7 +60,7 @@ def delete_vertices(hg, NUMBER_OF_VERTICES):
 
         time_before_vertex_1 = time.time()
         res = hg.delete_vertex_by_id(vertex_id=f"1:{i}")
-        assert res.status_code == 204, f"Could not delete vertex {i}." 
+        assert res.status_code == 204, f"Could not delete vertex {i} with error {res.response}." 
         time_after_vertex_1 = time.time()
         max_vertex = max(max_vertex, time_after_vertex_1 - time_before_vertex_1)
         min_vertex = min(min_vertex, time_after_vertex_1 - time_before_vertex_1)

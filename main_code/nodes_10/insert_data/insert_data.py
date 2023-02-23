@@ -108,18 +108,130 @@ def insert_data(lines, hg):
         "total_time": time.time() - initial_time
     }
 
-if __name__ == "__main__":
 
-    import sys
-    sys.path.insert(1, 'nodes_10/PyHugeGraph')
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    from PyHugeGraph import PyHugeGraphClient
 
-    hg = PyHugeGraphClient.HugeGraphClient("http://localhost", "8080", "nodes_10")
-    print(hg.clear_graph_alldata().status_code)
+def insert_vertex_gremlin(graph_name, name, age, label="person"):
 
-    file = open("../10_nodes.txt", 'r')
-    lines = file.readlines()
-    insert_data(lines, hg)
-    file.close()
+    import requests
+
+    query_ = graph_name + f'.traversal().addV("{label}").property("name", "{name}").property("age", {age})'
+    url_ = f"http://localhost:8081/graphs/{graph_name}/jobs/gremlin"
+    headers_ = {"Content-Type": "application/json", "Accept": "application/json"}
+
+    json_ = {
+        "gremlin": query_,
+        "bindings": {},
+        "language": "gremlin-groovy",
+        "aliases": {}
+    }
+
+    response = requests.post(
+        url=url_,
+        headers=headers_,
+        json=json_
+    )
+    return eval(response.content)["task_id"]
+
+
+def insert_edge_gremlin(graph_name, outv, inv):
+
+    import random
+    import requests
+
+    strong = random.randint(1, 10)
+
+    query_out_in = graph_name + f'.traversal().V("1:{outv}").as("{outv}").V("1:{inv}").as("{inv}").addE("relationship").from("{outv}").to("{inv}").property("strong", {strong}).property("FromTo", "{outv} -> {inv}")'
+    query_in_out = graph_name + f'.traversal().V("1:{inv}").as("{inv}").V("1:{outv}").as("{outv}").addE("relationship").from("{inv}").to("{outv}").property("strong", {strong}).property("FromTo", "{inv} -> {outv}")'
+
+    url_ = f"http://localhost:8081/graphs/{graph_name}/jobs/gremlin"
+    headers_ = {"Content-Type": "application/json", "Accept": "application/json"}
+
+    json_out_in = {
+        "gremlin": query_out_in,
+        "bindings": {},
+        "language": "gremlin-groovy",
+        "aliases": {}
+    }
+
+    json_in_out = {
+        "gremlin": query_in_out,
+        "bindings": {},
+        "language": "gremlin-groovy",
+        "aliases": {}
+    }
+
+    response_out_in = requests.post(
+        url=url_,
+        headers=headers_,
+        json=json_out_in
+    )
+
+    response_in_out = requests.post(
+        url=url_,
+        headers=headers_,
+        json=json_in_out
+    )
+
+    return [eval(response_out_in.content)["task_id"], eval(response_in_out.content)["task_id"]]
+
+def check_task_status(graph_name, task_id):
     
+    import requests
+
+    url = f"http://localhost:8081/graphs/{graph_name}/tasks/{task_id}"
+    response = requests.get(url=url)
+    return eval(response.content)["task_status"]
+
+def insert_data_gremlin(lines, graph_name, NUMBER_OF_VERTICES):
+
+    import time
+    import random
+
+    vertices_set_tasks = set()
+    edges_set_tasks = set()
+
+    initial_time = time.time()
+    for vertex in range(1, NUMBER_OF_VERTICES+1):
+        # vertices_set_tasks.add(insert_vertex_gremlin(graph_name=graph_name, name=vertex, age=random.randint(1, 100)))
+        insert_vertex_gremlin(graph_name=graph_name, name=vertex, age=random.randint(1, 100))
+
+    # init = len(vertices_set_tasks)
+    # temp = []
+    # while init > 0:
+
+    #     for task in vertices_set_tasks:
+    #         if check_task_status(graph_name=graph_name, task_id=task):
+    #             init -= 1
+    #             temp.append(task)
+
+    #     for task in temp:
+    #         vertices_set_tasks.remove(task)
+
+    #     temp = []
+
+    for line in lines[2:]:
+
+        line = line.replace("\n","")
+        vertex_1, vertex_2 = line.split(" ")
+
+        task_1, task_2 = insert_edge_gremlin(graph_name=graph_name, outv=vertex_1, inv=vertex_2)
+        # edges_set_tasks.add(task_1)
+        # edges_set_tasks.add(task_2)
+
+    # init = len(edges_set_tasks)
+    # temp = []
+    # while init > 0:
+
+    #     for task in edges_set_tasks:
+    #         if check_task_status(graph_name=graph_name, task_id=task):
+    #             init -= 1
+    #             temp.append(task)
+
+    #     for task in temp:
+    #         edges_set_tasks.remove(task)
+
+    #     temp = []
+
+    return time.time() - initial_time
