@@ -1,2 +1,6 @@
 cassandra/*
 hugegraph/*
+data/*.mtx
+data/*.edges
+data/*.txt
+data/.ipynb_che*/
