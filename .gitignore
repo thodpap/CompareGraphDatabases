@@ -4,3 +4,6 @@ data/*.mtx
 data/*.edges
 data/*.txt
 data/.ipynb_che*/
+__pycache__/
+*/__pycache__/
+*.txt
