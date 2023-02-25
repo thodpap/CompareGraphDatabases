@@ -42,5 +42,5 @@ if __name__ == "__main__":
 
     print(delete_data.delete_gremlin_alltogether(args.graph_name, vertices))
 
-    print(delete_data.delete_all_one_by_one_gremlin(args.graph_name, vertices))
+    # print(delete_data.delete_all_one_by_one_gremlin(args.graph_name, vertices))
     

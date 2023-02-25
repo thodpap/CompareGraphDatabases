@@ -17,10 +17,25 @@ if __name__ == "__main__":
 
     assert "node_1" in args.graph_name
 
+    if args.graph_name == "node_10":
+        vertices = 10
+    elif args.graph_name == "node_100":
+        vertices = 100
+    elif args.graph_name == "node_1000":
+        vertices = 1000
+    elif args.graph_name == "node_10000":
+        vertices = 10000
+    elif args.graph_name == "node_100000":
+        vertices = 100000
+    elif args.graph_name == "node_1000000":
+        vertices = 1000000
+    else:
+        assert False
+
     hg = PyHugeGraphClient.HugeGraphClient("http://localhost", "8081", args.graph_name)
 
     file = open(args.graph_name + ".txt", 'r')
     lines = file.readlines()
     # print(insert_data.insert_data(lines, hg))
-    print(insert_data.insert_data_gremlin(graph_name=args.graph_name, lines=lines, NUMBER_OF_VERTICES=10))
+    print(insert_data.insert_data_gremlin(graph_name=args.graph_name, lines=lines, NUMBER_OF_VERTICES=vertices))
     file.close()

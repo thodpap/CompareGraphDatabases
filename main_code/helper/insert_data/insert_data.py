@@ -235,3 +235,20 @@ def insert_data_gremlin(lines, graph_name, NUMBER_OF_VERTICES):
     #     temp = []
 
     return time.time() - initial_time
+
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# batch insertions
+
+def batch_insert(hg, lines, NUMBER_OF_VERTICES, batch=None, percentage=None):
+
+    if percentage != None and batch == None:
+        batch = NUMBER_OF_VERTICES*percentage
+
+    if batch == None:
+        batch == 100
+
+    batched_list = []
+    for i in range(1, NUMBER_OF_VERTICES+1):
+        for j in range(100):
+        
