@@ -88,3 +88,4 @@ def update_data(hg, NUMBER_OF_VERTICES):
 # ----------------------------------------------------------------------------------
 # Gremlin area
 
+def update_vertice_gremlin()

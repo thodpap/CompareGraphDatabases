@@ -197,42 +197,18 @@ def insert_data_gremlin(lines, graph_name, NUMBER_OF_VERTICES):
         # vertices_set_tasks.add(insert_vertex_gremlin(graph_name=graph_name, name=vertex, age=random.randint(1, 100)))
         insert_vertex_gremlin(graph_name=graph_name, name=vertex, age=random.randint(1, 100))
 
-    # init = len(vertices_set_tasks)
-    # temp = []
-    # while init > 0:
-
-    #     for task in vertices_set_tasks:
-    #         if check_task_status(graph_name=graph_name, task_id=task):
-    #             init -= 1
-    #             temp.append(task)
-
-    #     for task in temp:
-    #         vertices_set_tasks.remove(task)
-
-    #     temp = []
-
     for line in lines[2:]:
 
         line = line.replace("\n","")
         vertex_1, vertex_2 = line.split(" ")
 
         task_1, task_2 = insert_edge_gremlin(graph_name=graph_name, outv=vertex_1, inv=vertex_2)
-        # edges_set_tasks.add(task_1)
-        # edges_set_tasks.add(task_2)
-
-    # init = len(edges_set_tasks)
-    # temp = []
-    # while init > 0:
-
-    #     for task in edges_set_tasks:
-    #         if check_task_status(graph_name=graph_name, task_id=task):
-    #             init -= 1
-    #             temp.append(task)
-
-    #     for task in temp:
-    #         edges_set_tasks.remove(task)
-
-    #     temp = []
+   
+    while check_task_status(graph_name=graph_name, task_id=task_1) != "success":
+        pass
+   
+    while check_task_status(graph_name=graph_name, task_id=task_2) != "success":
+        pass
 
     return time.time() - initial_time
 
