@@ -88,4 +88,39 @@ def update_data(hg, NUMBER_OF_VERTICES):
 # ----------------------------------------------------------------------------------
 # Gremlin area
 
-def update_vertice_gremlin()
+def update_vertice_age_gremlin(graph_name="node_10", vertex=1, age=50):
+    import requests
+
+    url_ = f"http://localhost:8081/gremlin"
+    query_ = graph_name + f""".traversal().V("1:{vertex}").property('age', {age})"""
+
+    response = requests.get(url_ + "?gremlin=" + query_)
+    return eval(response.content)["result"]["data"]
+
+def update_vertices_gremlin(graph_name, vertices):
+    import time
+    import random
+
+    mean_ = 0
+    min_ = 1e10
+    max_ = 0
+
+    start = time.time()
+    for vertex in range(1, vertices + 1):
+        age = random.randint(1,100)
+        
+        begin_time = time.time()
+        update_vertice_age_gremlin(graph_name, vertex, age)
+        ti = time.time() - begin_time
+
+        min_ = min(min_, ti)
+        max_ = max(max_, ti)
+        mean_ += ti
+
+    return {
+        "min": min_,
+        "max": max_,
+        "mean": mean_ / vertices,
+        "total_time": time.time() - start
+    }
+
