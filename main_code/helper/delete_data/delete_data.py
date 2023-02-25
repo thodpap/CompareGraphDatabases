@@ -152,7 +152,7 @@ def delete_vertices_gremlin_alltogether(graph_name="node_10", Nodes=10):
     import time
 
     start_time = time.time()
-    delete_all_vertices_gremlin_sync(graph_name)
+    print(delete_all_vertices_gremlin_sync(graph_name))
     total = time.time() - start_time
 
     return {
