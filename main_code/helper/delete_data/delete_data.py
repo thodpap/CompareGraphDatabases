@@ -120,7 +120,7 @@ def delete_all_edges_gremlin_sync(graph_name="node_10"):
     url_ = f"http://localhost:8081/gremlin"
     query_ = graph_name + f'.traversal().E().drop()'
 
-    response = requests.delete(url_ + "?gremlin=" + query_)
+    response = requests.get(url_ + "?gremlin=" + query_)
     return eval(response.content)
 
 def delete_all_vertices_gremlin_sync(graph_name="node_10"):
@@ -129,7 +129,7 @@ def delete_all_vertices_gremlin_sync(graph_name="node_10"):
     url_ = f"http://localhost:8081/gremlin"
     query_ = graph_name + f'.traversal().V().drop()'
 
-    response = requests.delete(url_ + "?gremlin=" + query_)
+    response = requests.get(url_ + "?gremlin=" + query_)
     return eval(response.content)
 
 def delete_edges_gremlin_alltogether(graph_name="node_10"):
@@ -187,7 +187,7 @@ def delete_edges_by_vertex_gremlin(graph_name="node_10", vertex=1):
     url_ = f"http://localhost:8081/gremlin"
     query_ = graph_name + f'.traversal().V("1:{vertex}").outE().drop()'
 
-    response = requests.delete(url_ + "?gremlin=" + query_)
+    response = requests.get(url_ + "?gremlin=" + query_)
     return eval(response.content), nodes_count
 
 def delete_vertices_by_vertex_gremlin(graph_name="node_10", vertex=1):
@@ -196,7 +196,7 @@ def delete_vertices_by_vertex_gremlin(graph_name="node_10", vertex=1):
     url_ = f"http://localhost:8081/gremlin"
     query_ = graph_name + f'.traversal().V("1:{vertex}").drop()'
 
-    response = requests.delete(url_ + "?gremlin=" + query_)
+    response = requests.get(url_ + "?gremlin=" + query_)
     return eval(response.content)
 
 def delete_edges_gremlin_one_by_one(graph_name="node_10", Nodes=10):
@@ -212,7 +212,7 @@ def delete_edges_gremlin_one_by_one(graph_name="node_10", Nodes=10):
         begin = time.time()
         
         response, edge_count = delete_edges_by_vertex_gremlin(graph_name, vertex)
-        
+        # print(response)
         end = time.time() - begin
 
         min_ = min(min_, end / edge_count)

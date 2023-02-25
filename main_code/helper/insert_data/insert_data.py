@@ -251,4 +251,4 @@ def batch_insert(hg, lines, NUMBER_OF_VERTICES, batch=None, percentage=None):
     batched_list = []
     for i in range(1, NUMBER_OF_VERTICES+1):
         for j in range(100):
-        
+            pass
