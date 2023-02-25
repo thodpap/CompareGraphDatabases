@@ -224,3 +224,9 @@ def read_edges_gremlin(graph_name="node_10", Nodes=10, sync=True):
         "max": max_, 
         "total_time": total
     }
+
+def read_gremlin(graph_name, vertices, sync=True):
+    return {
+        "vertices": read_vertexes_gremlin(graph_name, vertices, sync),
+        "edges": read_edges_gremlin(graph_name, vertices, sync)
+    }

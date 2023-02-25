@@ -23,5 +23,7 @@ if __name__ == "__main__":
         print(delete_data.delete_data(hg, 10))
     elif args.method == 1:
         print(delete_data.delete_gremlin_alltogether(args.graph_name, vertices))
-    else:
+    elif args.method == 2:
         print(delete_data.delete_all_one_by_one_gremlin(args.graph_name, vertices))
+    else:
+        raise TypeError("Wrong method")

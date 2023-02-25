@@ -1,5 +1,6 @@
 from PyHugeGraph import PyHugeGraphClient
 from helper.read_data import read_data
+from helper import get_vertices_number
 
 if __name__ == "__main__":
     import argparse
@@ -9,6 +10,7 @@ if __name__ == "__main__":
 
     # Add an argument
     parser.add_argument('graph_name', type=str, help='the graph name')
+    parser.add_argument('method', type=int, help='method: 0: normal read_data, 1: sync, 2: async')
 
     # Parse the command-line arguments
     args = parser.parse_args()
@@ -18,27 +20,13 @@ if __name__ == "__main__":
 
     hg = PyHugeGraphClient.HugeGraphClient("http://localhost", "8081", args.graph_name)
 
-    if args.graph_name == "node_10":
-        vertexes = 10
-    elif args.graph_name == "node_100":
-        vertexes = 100
-    elif args.graph_name == "node_1000":
-        vertexes = 1000
-    elif args.graph_name == "node_10000":
-        vertexes = 10000
-    elif args.graph_name == "node_100000":
-        vertexes = 100000
-    elif args.graph_name == "node_1000000":
-        vertexes = 1000000
+    vertexes = get_vertices_number(args)
+
+    if args.method == 0:
+        print("Normal: ", read_data.read_data(hg, vertexes))
+    elif args.method == 1:
+        print("Sync: ", read_data.read_gremlin(args.graph_name, vertexes, True))
+    elif args.method == 2:
+        print("Async: ", read_data.read_gremlin(args.graph_name, vertexes, False))
     else:
-        assert False
-
-    # print(read_data.read_data(hg, 10))
-
-    # print(read_data.read_vertex_gremlin("node_10", 1, False))
-
-    print("Sync read vertexes", read_data.read_vertexes_gremlin(args.graph_name, vertexes, True))
-    print("Async read vertexes", read_data.read_vertexes_gremlin(args.graph_name, vertexes, False))
-    print()
-    print("Sync read edges", read_data.read_edges_gremlin(args.graph_name, vertexes, True))
-    print("Async read edges", read_data.read_edges_gremlin(args.graph_name, vertexes, False))
+        raise TypeError("Wrong method")

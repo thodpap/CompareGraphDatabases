@@ -84,3 +84,7 @@ def update_data(hg, NUMBER_OF_VERTICES):
         "edges":edges,
         "vertices":vertices
     }
+
+# ----------------------------------------------------------------------------------
+# Gremlin area
+
