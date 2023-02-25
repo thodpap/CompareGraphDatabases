@@ -22,7 +22,7 @@ if __name__ == "__main__":
     if args.method == 0:
         print(update_data.update_data(hg, vertices))
     elif args.method == 1:
-        print(update_data.update_vertices_gremlin(args.graph_name, vertices))
+        print(update_data.update_gremlin(args.graph_name, vertices))
     else:
         raise TypeError("Wrong method")
 

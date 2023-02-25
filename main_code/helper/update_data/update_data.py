@@ -97,6 +97,71 @@ def update_vertice_age_gremlin(graph_name="node_10", vertex=1, age=50):
     response = requests.get(url_ + "?gremlin=" + query_)
     return eval(response.content)["result"]["data"]
 
+def update_edges_of_vertex_gremlin(graph_name="node_10", vertex=1):
+    import requests
+    import random
+    import time
+
+    url_ = f"http://localhost:8081/gremlin"
+    query_ = graph_name + f""".traversal().V("1:{vertex}").outE()"""
+    
+    response = requests.get(url_ + "?gremlin=" + query_)
+    
+    obj = eval(response.content)["result"]["data"]
+
+    total_edges = len(obj)
+    min_ = 1e10
+    max_ = 0
+    mean_ = 0
+
+    for o in obj:
+        strong = random.randint(1,15)
+        url_ = f"http://localhost:8081/gremlin"
+        query_ = graph_name + f""".traversal().E("{o["id"]}").property("strong", {strong})"""
+        
+        begin = time.time()
+        response = requests.get(url_ + "?gremlin=" + query_)
+        ret = eval(response.content)["result"]["data"]
+        e = time.time() - begin
+        min_ = min(min_, e)
+        max_ = max(max_, e)
+        mean_ += e
+    
+    if total_edges > 0:
+        mean_ /= total_edges
+
+    return {
+        "edges_updated": total_edges,
+        "min": min_,
+        "max": max_,
+        "mean": mean_,
+    }
+
+def update_edges_gremlin(graph_name, vertices):
+    import time
+    
+    begin_time = time.time() 
+    
+    total_edges = 0
+    min_ = 1e10
+    max_ = 0
+    mean_ = 0
+
+    for vertex in range(1, 1 + vertices):
+        ret = update_edges_of_vertex_gremlin(graph_name, vertex)
+        min_ = min(min_, ret["min"])
+        max_ = max(max_, ret["max"])
+        mean_ += ret["edges_updated"] * ret["mean"]
+        total_edges += ret["edges_updated"]
+
+    return {
+        "edges_updated": total_edges,
+        "min": min_,
+        "max": max_,
+        "mean": mean_ / total_edges,
+        "total_time": time.time() - begin_time
+    }
+
 def update_vertices_gremlin(graph_name, vertices):
     import time
     import random
@@ -124,3 +189,8 @@ def update_vertices_gremlin(graph_name, vertices):
         "total_time": time.time() - start
     }
 
+def update_gremlin(graph_name, vertices):
+    return {
+        "edges": update_edges_gremlin(graph_name, vertices),
+        "vertices": update_vertices_gremlin(graph_name, vertices)
+    }
