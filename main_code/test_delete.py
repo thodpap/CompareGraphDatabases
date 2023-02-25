@@ -20,10 +20,10 @@ if __name__ == "__main__":
     hg = PyHugeGraphClient.HugeGraphClient("http://localhost", "8081", args.graph_name)
     
     if args.method == 0:
-        print(delete_data.delete_data(hg, 10))
+        print("Basic delete", delete_data.delete_data(hg, 10))
     elif args.method == 1:
-        print(delete_data.delete_gremlin_alltogether(args.graph_name, vertices))
+        print("Gremlin delete all together", delete_data.delete_gremlin_alltogether(args.graph_name, vertices))
     elif args.method == 2:
-        print(delete_data.delete_all_one_by_one_gremlin(args.graph_name, vertices))
+        print("Gremlin delete one by one", delete_data.delete_all_one_by_one_gremlin(args.graph_name, vertices))
     else:
         raise TypeError("Wrong method")

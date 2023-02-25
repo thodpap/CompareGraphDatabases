@@ -10,7 +10,7 @@ if __name__ == "__main__":
 
     # Add an argument
     parser.add_argument('graph_name', type=str, help='the graph name')
-    parser.add_argument('method', type=int, help='method: 0 means basic and 1 means gremlin')
+    parser.add_argument('method', type=int, help='method: 0: basic insert, 1: insert with gremlin, 2: both')
 
     # Parse the command-line arguments
     args = parser.parse_args()
@@ -23,9 +23,12 @@ if __name__ == "__main__":
     lines = file.readlines()
 
     if args.method == 0:
-        print(insert_data.insert_data(lines, hg))
+        print("basic insert", insert_data.insert_data(lines, hg))
     elif args.method == 1:
-        print(insert_data.insert_data_gremlin(graph_name=args.graph_name, lines=lines, NUMBER_OF_VERTICES=vertices))
+        print("gremlin insert", insert_data.insert_data_gremlin(graph_name=args.graph_name, lines=lines, NUMBER_OF_VERTICES=vertices))
+    elif args.method == 2:
+        print("basic insert", insert_data.insert_data(lines, hg))
+        print("gremlin insert", insert_data.insert_data_gremlin(graph_name=args.graph_name, lines=lines, NUMBER_OF_VERTICES=vertices))
     else:
         file.close()
         raise TypeError("Wrong method")

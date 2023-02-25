@@ -10,7 +10,7 @@ if __name__ == "__main__":
 
     # Add an argument
     parser.add_argument('graph_name', type=str, help='the graph name')
-    parser.add_argument('method', type=int, help='method: 0 means basic')
+    parser.add_argument('method', type=int, help='method: 0: basic update, 1: gremlin update, 2: both')
 
     # Parse the command-line arguments
     args = parser.parse_args()
@@ -20,9 +20,12 @@ if __name__ == "__main__":
     hg = PyHugeGraphClient.HugeGraphClient("http://localhost", "8081", args.graph_name)
     
     if args.method == 0:
-        print(update_data.update_data(hg, vertices))
+        print("basic update", update_data.update_data(hg, vertices))
     elif args.method == 1:
-        print(update_data.update_gremlin(args.graph_name, vertices))
+        print("Gremlin update", update_data.update_gremlin(args.graph_name, vertices))
+    elif args.method == 2:
+        print("basic update", update_data.update_data(hg, vertices))
+        print("Gremlin update", update_data.update_gremlin(args.graph_name, vertices))
     else:
         raise TypeError("Wrong method")
 
