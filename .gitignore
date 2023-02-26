@@ -7,3 +7,4 @@ data/.ipynb_che*/
 __pycache__/
 */__pycache__/
 *.txt
+*/txts_zip/

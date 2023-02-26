@@ -824,7 +824,6 @@ class HugeGraphClient(object):
             para = para + "&nearest=" + label
 
         url = url + para[1:]
-        print(url)
         response = requests.get(url, headers=self.headers)
         res = Response(response.status_code, response.content)
         return res
