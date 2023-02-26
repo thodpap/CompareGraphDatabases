@@ -17,7 +17,7 @@ def traverser_kout(hg, source, direction="BOTH", max_depth=5, label="", nearest=
     import time
 
     time_before = time.time()
-    res = hg.traverser_kout(source, direction, max_depth, label, nearest)
+    res = hg.traverser_kout(source=source, direction=direction, depth=max_depth, label=label, nearest=nearest)
     time_after = time.time()
 
     return {

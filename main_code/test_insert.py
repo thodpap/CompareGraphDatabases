@@ -19,11 +19,13 @@ if __name__ == "__main__":
 
     hg = PyHugeGraphClient.HugeGraphClient("http://localhost", "8081", args.graph_name)
 
+    print(args.graph_name + ".txt")
     file = open(args.graph_name + ".txt", 'r')
+    
     lines = file.readlines()
 
     if args.method == 0:
-        print("basic insert", insert_data.insert_data(lines, hg))
+        print("basic insert", insert_data.batch_insert(hg=hg, lines=lines, NUMBER_OF_VERTICES=100000, batch_vertices=500, batch_edges=250))
     elif args.method == 1:
         print("gremlin insert", insert_data.insert_data_gremlin(graph_name=args.graph_name, lines=lines, NUMBER_OF_VERTICES=vertices))
     elif args.method == 2:

@@ -817,13 +817,14 @@ class HugeGraphClient(object):
         if depth == "":
             return Response(400, "depth can not be empty")
         else:
-            para = para + "&depth=" + str(depth)
+            para = para + "&max_depth=" + str(depth)
         if label != "":
             para = para + "&label=" + label
         if nearest != "":
             para = para + "&nearest=" + label
 
         url = url + para[1:]
+        print(url)
         response = requests.get(url, headers=self.headers)
         res = Response(response.status_code, response.content)
         return res
@@ -850,7 +851,7 @@ class HugeGraphClient(object):
         if depth == "":
             return Response(400, "depth can not be empty")
         else:
-            para = para + "&depth=" + str(depth)
+            para = para + "&max_depth=" + str(depth)
         if label != "":
             para = para + "&label=" + label
 
@@ -1066,5 +1067,135 @@ class HugeGraphClient(object):
             "aliases": {}
         }
         response = requests.post(url, data=json.dumps(data), headers=self.headers)
+        res = Response(response.status_code, response.content)
+        return res
+    
+    def update_multi_vertex(self, data):
+        """
+        创建多个顶点
+        :param data:
+                    [
+                        {
+                            "label": "person",
+                            "properties": {
+                                "name": "marko",
+                                "age": 29
+                            }
+                        },
+                        {
+                            "label": "software",
+                            "properties": {
+                                "name": "ripple",
+                                "lang": "java",
+                                "price": 199
+                            }
+                        }
+                    ]
+        :return:
+        """
+        url = self.host + "/graphs" + "/" \
+              + self.graph + "/graph/vertices/batch"
+        response = requests.put(url, data=json.dumps(data), headers=self.headers)
+        res = Response(response.status_code, response.content)
+        return res
+
+
+    def update_multi_edge(self, data):
+        """
+        创建多条边
+        :param data:
+                [
+                    {
+                        "label": "created",
+                        "outV": "1:peter",
+                        "inV": "2:lop",
+                        "outVLabel": "person",
+                        "inVLabel": "software",
+                        "properties": {
+                            "date": "2017-5-18",
+                            "weight": 0.2
+                        }
+                    },
+                    {
+                        "label": "knows",
+                        "outV": "1:marko",
+                        "inV": "1:vadas",
+                        "outVLabel": "person",
+                        "inVLabel": "person",
+                        "properties": {
+                            "date": "2016-01-10",
+                            "weight": 0.5
+                        }
+                    }
+                ]
+        :return:
+        """
+        url = self.host + "/graphs" + "/" + self.graph + "/graph/edges/batch"
+        response = requests.put(url, data=json.dumps(data), headers=self.headers)
+        res = Response(response.status_code, response.content)
+        return res
+    
+    def delete_multi_vertex(self, data):
+        """
+        创建多个顶点
+        :param data:
+                    [
+                        {
+                            "label": "person",
+                            "properties": {
+                                "name": "marko",
+                                "age": 29
+                            }
+                        },
+                        {
+                            "label": "software",
+                            "properties": {
+                                "name": "ripple",
+                                "lang": "java",
+                                "price": 199
+                            }
+                        }
+                    ]
+        :return:
+        """
+        url = self.host + "/graphs" + "/" \
+              + self.graph + "/graph/vertices/batch"
+        response = requests.delete(url, data=json.dumps(data), headers=self.headers)
+        res = Response(response.status_code, response.content)
+        return res
+
+
+    def delete_multi_edge(self, data):
+        """
+        创建多条边
+        :param data:
+                [
+                    {
+                        "label": "created",
+                        "outV": "1:peter",
+                        "inV": "2:lop",
+                        "outVLabel": "person",
+                        "inVLabel": "software",
+                        "properties": {
+                            "date": "2017-5-18",
+                            "weight": 0.2
+                        }
+                    },
+                    {
+                        "label": "knows",
+                        "outV": "1:marko",
+                        "inV": "1:vadas",
+                        "outVLabel": "person",
+                        "inVLabel": "person",
+                        "properties": {
+                            "date": "2016-01-10",
+                            "weight": 0.5
+                        }
+                    }
+                ]
+        :return:
+        """
+        url = self.host + "/graphs" + "/" + self.graph + "/graph/edges/batch"
+        response = requests.delete(url, data=json.dumps(data), headers=self.headers)
         res = Response(response.status_code, response.content)
         return res

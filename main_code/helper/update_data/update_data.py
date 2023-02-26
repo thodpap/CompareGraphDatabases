@@ -194,3 +194,135 @@ def update_gremlin(graph_name, vertices):
         "edges": update_edges_gremlin(graph_name, vertices),
         "vertices": update_vertices_gremlin(graph_name, vertices)
     }
+
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# batch updates
+
+def batch_update_vertices(hg, NUMBER_OF_VERTICES, batch=None, percentage=None):
+
+    import random
+    import time
+    from tqdm import tqdm
+
+    if percentage != None and batch == None:
+        batch = NUMBER_OF_VERTICES*percentage
+
+    if batch == None:
+        batch == 100
+
+    min_vertex = 100000000000
+    max_vertex = 0
+    mean_vertex = 0
+
+    for i in tqdm(range(1, NUMBER_OF_VERTICES+1, batch), desc = 'tqdm() Progress Bar'):
+        batched_list = []
+        for j in range(i, min(i+batch, NUMBER_OF_VERTICES+1)):
+            data_ = {
+                "label":"person",
+                 "properties": {
+                    "name": str(j),
+                    "age": random.randint(1, 100)
+                }
+            }
+            batched_list.append(data_)
+        
+        data__ = {
+            "vertices":batched_list,
+            "update_strategies":{
+                "age":"OVERRIDE"
+            }
+        }
+        time_before_batch = time.time()
+        hg.update_multi_vertex(data=data__)
+        time_after_batch = time.time()
+        diff = (time_after_batch - time_before_batch)/batch
+        max_vertex = max(max_vertex, diff)
+        min_vertex = min(min_vertex, diff)
+        mean_vertex += time_after_batch - time_before_batch
+
+    return {
+            "max":max_vertex,
+            "min":min_vertex,
+            "mean":mean_vertex/NUMBER_OF_VERTICES
+        }
+
+def batch_update_edges(hg, lines, NUMBER_OF_VERTICES, batch=None, percentage=None):
+
+    import random
+    import time
+    from tqdm import tqdm
+
+    if percentage != None and batch == None:
+        batch = NUMBER_OF_VERTICES*percentage
+
+    if batch == None:
+        batch == 100   
+
+    length = len(lines)
+    print("length =", length)
+    min_edge = 100000000000
+    max_edge = 0
+    mean_edge = 0
+    
+    for i in tqdm(range(2, len(lines), int(batch/2 - 1)), desc = 'tqdm() Progress Bar'):
+        batched_list = []
+        for j in range(i, min(int(i+(batch/2 - 1)), length)):
+            line = lines[j]
+            line = line.replace("\n","")
+            vertex_1, vertex_2 = line.split(" ")
+            data_ = {
+                "label": "relationship",
+                "id":f"S1:{vertex_1}>1>>S1:{vertex_2}",
+                "outV": f"1:{vertex_1}",
+                "inV": f"1:{vertex_2}",
+                "outVLabel": "person",
+                "inVLabel": "person",
+                "properties": {
+                    "strong": random.randint(1, 10),
+                    "FromTo": f"{vertex_1} -> {vertex_2}"
+                }
+            }
+            batched_list.append(data_)
+            data_ = {
+                "label": "relationship",
+                "id":f"S1:{vertex_2}>1>>S1:{vertex_1}",
+                "outV": f"1:{vertex_2}",
+                "inV": f"1:{vertex_1}",
+                "outVLabel": "person",
+                "inVLabel": "person",
+                "properties": {
+                    "strong": random.randint(1, 10),
+                    "FromTo": f"{vertex_2} -> {vertex_1}"
+                }
+            }
+            batched_list.append(data_)
+        data__ = {
+            "edges":batched_list,
+            "update_strategies":{
+                "strong":"OVERRIDE"
+            }
+        }
+        time_before_edge_1 = time.time()
+        hg.update_multi_edge(data__)
+        time_after_edge_1 = time.time()
+        diff = (time_after_edge_1 - time_before_edge_1)/batch
+        max_edge = max(max_edge, diff)
+        min_edge = min(min_edge, diff)
+        mean_edge += time_after_edge_1 - time_before_edge_1
+
+    return {
+        "max":max_edge,
+        "min":min_edge,
+        "mean":mean_edge/length
+    } 
+
+def batch_update(hg, lines, NUMBER_OF_VERTICES, batch_vertices=None, batch_edges=None, percentage=None):
+
+    vertices = batch_update_vertices(hg=hg, NUMBER_OF_VERTICES=NUMBER_OF_VERTICES, batch=batch_vertices, percentage=percentage)
+    edges = batch_update_edges(hg=hg, lines=lines, NUMBER_OF_VERTICES=NUMBER_OF_VERTICES, batch=batch_edges, percentage=percentage)
+
+    return {
+        "vertices":vertices,
+        "edges":edges
+    }

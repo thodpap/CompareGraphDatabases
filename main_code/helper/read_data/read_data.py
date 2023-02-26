@@ -50,7 +50,8 @@ def read_vertices(hg, NUMBER_OF_VERTICES):
 
         time_before_vertex_1 = time.time()
         res = hg.get_vertex_by_id(vertex_id=f"1:{i}")
-        assert res.status_code == 200, f"Could not read vertex {i}." 
+        assert res.status_code == 200, f"Could not read vertex {i}."
+        # print(res.response) 
         time_after_vertex_1 = time.time()
         max_vertex = max(max_vertex, time_after_vertex_1 - time_before_vertex_1)
         min_vertex = min(min_vertex, time_after_vertex_1 - time_before_vertex_1)
@@ -65,8 +66,9 @@ def read_vertices(hg, NUMBER_OF_VERTICES):
 
 def read_data(hg, NUMBER_OF_VERTICES):
 
-    edges = read_edges(hg, NUMBER_OF_VERTICES)
     vertices = read_vertices(hg, NUMBER_OF_VERTICES)
+    edges = read_edges(hg, NUMBER_OF_VERTICES)
+    
 
     return {
         "edges":edges,

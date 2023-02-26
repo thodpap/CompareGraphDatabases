@@ -75,11 +75,11 @@ def insert_data(lines, hg):
         strong = random.randint(1, 10)
 
         time_before_edge_1 = time.time()
-        res_e_1 = hg.create_edge(edge_label="relationship", outv=res_1["id"], inv=res_2["id"], outv_label="person", inv_label="person", properties={"strong":strong, "FromTo": f"{vertex_1} -> {vertex_2}"})
+        res_e_1 = hg.create_edge(edge_label="relationship", outv=f"1:{vertex_1}", inv=f"1:{vertex_2}", outv_label="person", inv_label="person", properties={"strong":strong, "FromTo": f"{vertex_1} -> {vertex_2}"})
         assert res_e_1.status_code == 201, f"{vertex_1} -> {vertex_2} edge could not be created with error {res_e_1.response}"
         time_after_edge_1 = time.time()
         time_before_edge_2 = time.time()
-        res_e_2 = hg.create_edge(edge_label="relationship", outv=res_2["id"], inv=res_1["id"], outv_label="person", inv_label="person", properties={"strong":strong, "FromTo": f"{vertex_2} -> {vertex_1}"})
+        res_e_2 = hg.create_edge(edge_label="relationship", outv=f"1:{vertex_2}", inv=f"1:{vertex_1}", outv_label="person", inv_label="person", properties={"strong":strong, "FromTo": f"{vertex_2} -> {vertex_1}"})
         assert res_e_2.status_code == 201, f"{vertex_2} -> {vertex_1} edge could not be created with error {res_e_2.response}"       
         time_after_edge_2 = time.time()
 
@@ -216,7 +216,11 @@ def insert_data_gremlin(lines, graph_name, NUMBER_OF_VERTICES):
 
 # batch insertions
 
-def batch_insert(hg, lines, NUMBER_OF_VERTICES, batch=None, percentage=None):
+def batch_insert_vertices(hg, NUMBER_OF_VERTICES, batch=None, percentage=None):
+
+    import random
+    import time
+    from tqdm import tqdm
 
     if percentage != None and batch == None:
         batch = NUMBER_OF_VERTICES*percentage
@@ -224,7 +228,106 @@ def batch_insert(hg, lines, NUMBER_OF_VERTICES, batch=None, percentage=None):
     if batch == None:
         batch == 100
 
-    batched_list = []
-    for i in range(1, NUMBER_OF_VERTICES+1):
-        for j in range(100):
-            pass
+    min_vertex = 100000000000
+    max_vertex = 0
+    mean_vertex = 0
+
+    for i in tqdm(range(1, NUMBER_OF_VERTICES+1, batch), desc = 'tqdm() Progress Bar'):
+        batched_list = []
+        for j in range(i, min(i+batch, NUMBER_OF_VERTICES+1)):
+            data_ = {
+                "label":"person",
+                 "properties": {
+                    "name": str(j),
+                    "age": random.randint(1, 100)
+                }
+            }
+            batched_list.append(data_)
+        time_before_batch = time.time()
+        hg.create_multi_vertex(data=batched_list)
+        time_after_batch = time.time()
+        diff = (time_after_batch - time_before_batch)/batch
+        max_vertex = max(max_vertex, diff)
+        min_vertex = min(min_vertex, diff)
+        mean_vertex += time_after_batch - time_before_batch
+
+    return {
+            "max":max_vertex,
+            "min":min_vertex,
+            "mean":mean_vertex/NUMBER_OF_VERTICES
+        }
+
+def batch_inset_edges(hg, lines, NUMBER_OF_VERTICES, batch=None, percentage=None):
+
+    import random
+    import time
+    from tqdm import tqdm
+
+    if percentage != None and batch == None:
+        batch = NUMBER_OF_VERTICES*percentage
+
+    if batch == None:
+        batch == 100   
+
+    length = len(lines)
+    print("length =", length)
+    min_edge = 100000000000
+    max_edge = 0
+    mean_edge = 0
+    
+    for i in tqdm(range(2, len(lines), int(batch/2 - 1)), desc = 'tqdm() Progress Bar'):
+        batched_list = []
+        for j in range(i, min(int(i+(batch/2 - 1)), length)):
+            line = lines[j]
+            line = line.replace("\n","")
+            vertex_1, vertex_2 = line.split(" ")
+            data_ = {
+                "label": "relationship",
+                "outV": f"1:{vertex_1}",
+                "inV": f"1:{vertex_2}",
+                "outVLabel": "person",
+                "inVLabel": "person",
+                "properties": {
+                    "strong": random.randint(1, 10),
+                    "FromTo": f"{vertex_1} -> {vertex_2}"
+                }
+            }
+            batched_list.append(data_)
+            data_ = {
+                "label": "relationship",
+                "outV": f"1:{vertex_2}",
+                "inV": f"1:{vertex_1}",
+                "outVLabel": "person",
+                "inVLabel": "person",
+                "properties": {
+                    "strong": random.randint(1, 10),
+                    "FromTo": f"{vertex_2} -> {vertex_1}"
+                }
+            }
+            batched_list.append(data_)
+        
+        time_before_edge_1 = time.time()
+        hg.create_multi_edge(batched_list)
+        time_after_edge_1 = time.time()
+        diff = (time_after_edge_1 - time_before_edge_1)/batch
+        max_edge = max(max_edge, diff)
+        min_edge = min(min_edge, diff)
+        mean_edge += time_after_edge_1 - time_before_edge_1
+    
+
+    return {
+        "max":max_edge,
+        "min":min_edge,
+        "mean":mean_edge/length
+    } 
+
+def batch_insert(hg, lines, NUMBER_OF_VERTICES, batch_vertices=None, batch_edges=None, percentage=None):
+
+    vertices = batch_insert_vertices(hg=hg, NUMBER_OF_VERTICES=NUMBER_OF_VERTICES, batch=batch_vertices, percentage=percentage)
+    edges = batch_inset_edges(hg=hg, lines=lines, NUMBER_OF_VERTICES=NUMBER_OF_VERTICES, batch=batch_edges, percentage=percentage)
+
+    return {
+        "vertices":vertices,
+        "edges":edges
+    }
+    

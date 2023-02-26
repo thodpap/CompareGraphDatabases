@@ -17,10 +17,15 @@ if __name__ == "__main__":
 
     vertices = get_vertices_number(args)    
     
+    print(args.graph_name + ".txt")
+    file = open(args.graph_name + ".txt", 'r')
+    
+    lines = file.readlines()
+
     hg = PyHugeGraphClient.HugeGraphClient("http://localhost", "8081", args.graph_name)
     
     if args.method == 0:
-        print("basic update", update_data.update_data(hg, vertices))
+        print("basic update", update_data.batch_update(hg=hg, lines=lines, NUMBER_OF_VERTICES=vertices, batch_vertices=500, batch_edges=250, percentage=None))
     elif args.method == 1:
         print("Gremlin update", update_data.update_gremlin(args.graph_name, vertices))
     elif args.method == 2:
