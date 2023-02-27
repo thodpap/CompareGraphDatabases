@@ -246,7 +246,9 @@ def batch_insert_vertices(hg, NUMBER_OF_VERTICES, batch=None, percentage=None):
         time_before_batch = time.time()
         hg.create_multi_vertex(data=batched_list)
         time_after_batch = time.time()
-        diff = (time_after_batch - time_before_batch)/batch
+        
+        b = min(NUMBER_OF_VERTICES + 1 - i, batch)
+        diff = (time_after_batch - time_before_batch)/b
         max_vertex = max(max_vertex, diff)
         min_vertex = min(min_vertex, diff)
         mean_vertex += time_after_batch - time_before_batch
@@ -271,13 +273,13 @@ def batch_inset_edges(hg, lines, NUMBER_OF_VERTICES, batch=None, percentage=None
 
     length = len(lines)
     print("length =", length)
-    min_edge = 100000000000
+    min_edge = 1e10
     max_edge = 0
     mean_edge = 0
     
-    for i in tqdm(range(2, len(lines), int(batch/2 - 1)), desc = 'tqdm() Progress Bar'):
+    for i in tqdm(range(2, len(lines), batch), desc = 'tqdm() Progress Bar'):
         batched_list = []
-        for j in range(i, min(int(i+(batch/2 - 1)), length)):
+        for j in range(i, min(i+ batch, length)):
             line = lines[j]
             line = line.replace("\n","")
             vertex_1, vertex_2 = line.split(" ")    
@@ -309,7 +311,9 @@ def batch_inset_edges(hg, lines, NUMBER_OF_VERTICES, batch=None, percentage=None
         time_before_edge_1 = time.time()
         hg.create_multi_edge(batched_list)
         time_after_edge_1 = time.time()
-        diff = (time_after_edge_1 - time_before_edge_1)/batch
+
+        b = min(length - i, batch)
+        diff = (time_after_edge_1 - time_before_edge_1)/b
         max_edge = max(max_edge, diff)
         min_edge = min(min_edge, diff)
         mean_edge += time_after_edge_1 - time_before_edge_1
@@ -318,7 +322,7 @@ def batch_inset_edges(hg, lines, NUMBER_OF_VERTICES, batch=None, percentage=None
     return {
         "max":max_edge,
         "min":min_edge,
-        "mean":mean_edge/(2*length)
+        "mean":mean_edge/(length - 2)
     } 
 
 def batch_insert(hg, lines, NUMBER_OF_VERTICES, batch_vertices=None, batch_edges=None, percentage=None):

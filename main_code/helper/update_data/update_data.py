@@ -236,7 +236,9 @@ def batch_update_vertices(hg, NUMBER_OF_VERTICES, batch=None, percentage=None):
         time_before_batch = time.time()
         hg.update_multi_vertex(data=data__)
         time_after_batch = time.time()
-        diff = (time_after_batch - time_before_batch)/batch
+
+        b = min(NUMBER_OF_VERTICES + 1 - i, batch)
+        diff = (time_after_batch - time_before_batch)/b
         max_vertex = max(max_vertex, diff)
         min_vertex = min(min_vertex, diff)
         mean_vertex += time_after_batch - time_before_batch
@@ -264,7 +266,8 @@ def batch_update_edges(hg, lines, NUMBER_OF_VERTICES, batch=None, percentage=Non
     min_edge = 100000000000
     max_edge = 0
     mean_edge = 0
-    
+    counter_length = 0
+
     for i in tqdm(range(2, len(lines), int(batch/2 - 1)), desc = 'tqdm() Progress Bar'):
         batched_list = []
         for j in range(i, min(int(i+(batch/2 - 1)), length)):
@@ -306,15 +309,18 @@ def batch_update_edges(hg, lines, NUMBER_OF_VERTICES, batch=None, percentage=Non
         time_before_edge_1 = time.time()
         hg.update_multi_edge(data__)
         time_after_edge_1 = time.time()
-        diff = (time_after_edge_1 - time_before_edge_1)/batch
+        b = min(length - i, batch)
+        diff = (time_after_edge_1 - time_before_edge_1)/b        
         max_edge = max(max_edge, diff)
         min_edge = min(min_edge, diff)
         mean_edge += time_after_edge_1 - time_before_edge_1
+        
+        counter_length += b
 
     return {
         "max":max_edge,
         "min":min_edge,
-        "mean":mean_edge/(2*length)
+        "mean":mean_edge/counter_length
     } 
 
 def batch_update(hg, lines, NUMBER_OF_VERTICES, batch_vertices=None, batch_edges=None, percentage=None):

@@ -24,9 +24,12 @@ def read_edges(hg, NUMBER_OF_VERTICES):
         edges = eval(res.response)
         time_after_edge_1 = time.time()
         
-        max_edge = max(max_edge, (time_after_edge_1 - time_before_edge_1)/len(edges["edges"]))
-        min_edge = min(min_edge, (time_after_edge_1 - time_before_edge_1)/len(edges["edges"]))
-        
+        try:
+            max_edge = max(max_edge, (time_after_edge_1 - time_before_edge_1)/len(edges["edges"]))
+            min_edge = min(min_edge, (time_after_edge_1 - time_before_edge_1)/len(edges["edges"]))
+        except:
+            pass
+
         mean_edge += time_after_edge_1 - time_before_edge_1
         
         counter_edges += len(edges["edges"])
