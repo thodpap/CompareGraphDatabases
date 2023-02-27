@@ -94,15 +94,15 @@ def insert_data(lines, hg):
 
     return {
         "vertices":{
-            "mean_vertex": mean_vertex/counter_vertices,
-            "max_vertex": max_vertex,
-            "min_vertex": min_vertex,
+            "mean": mean_vertex/counter_vertices,
+            "max": max_vertex,
+            "min": min_vertex,
             "number_of_vertices": counter_vertices
         },
         "edges":{    
-            "mean_edge": mean_edge/counter_edges,
-            "max_edge": max_edge,
-            "min_edge": min_edge,
+            "mean": mean_edge/counter_edges,
+            "max": max_edge,
+            "min": min_edge,
             "number_of_edges": counter_edges
         },
         "total_time": time.time() - initial_time
@@ -280,7 +280,7 @@ def batch_inset_edges(hg, lines, NUMBER_OF_VERTICES, batch=None, percentage=None
         for j in range(i, min(int(i+(batch/2 - 1)), length)):
             line = lines[j]
             line = line.replace("\n","")
-            vertex_1, vertex_2 = line.split(" ")
+            vertex_1, vertex_2 = line.split(" ")    
             data_ = {
                 "label": "relationship",
                 "outV": f"1:{vertex_1}",

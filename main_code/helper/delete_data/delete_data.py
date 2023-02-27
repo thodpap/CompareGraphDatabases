@@ -37,9 +37,9 @@ def delete_edges(hg, NUMBER_OF_VERTICES):
        
 
     return {
-        "mean_edge": mean_edge/counter,
-        "max_edge": max_edge,
-        "min_edge": min_edge,
+        "mean": mean_edge/counter,
+        "max": max_edge,
+        "min": min_edge,
         "total_time": time.time() - initial_time
     }
 
@@ -67,9 +67,9 @@ def delete_vertices(hg, NUMBER_OF_VERTICES):
         mean_vertex += time_after_vertex_1 - time_before_vertex_1
 
     return {
-        "mean_vertex": mean_vertex/counter,
-        "max_vertex": max_vertex,
-        "min_vertex": min_vertex,
+        "mean": mean_vertex/counter,
+        "max": max_vertex,
+        "min": min_vertex,
         "total_time": time.time() - initial_time
     }
 
@@ -143,9 +143,14 @@ def delete_edges_gremlin_alltogether(graph_name="node_10"):
     
     total = time.time() - start_time
 
+    if edges_count == 0:
+        edges_count += 1
+        
     return {
-        "mean_time": total / edges_count, 
-        "total_time": total
+        "min": 0,
+        "mean": total / edges_count, 
+        "total_time": total,
+        "max": 0,
     }
 
 def delete_vertices_gremlin_alltogether(graph_name="node_10", Nodes=10):
@@ -156,8 +161,10 @@ def delete_vertices_gremlin_alltogether(graph_name="node_10", Nodes=10):
     total = time.time() - start_time
 
     return {
-        "mean_time": total / Nodes, 
-        "total_time": total
+        "min": 0,
+        "mean": total / Nodes, 
+        "total_time": total,
+        "max": 0,
     }
 
 def delete_gremlin_alltogether(graph_name="node_10", Nodes=10):

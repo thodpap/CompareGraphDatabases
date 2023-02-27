@@ -14,7 +14,7 @@ def read_edges(hg, NUMBER_OF_VERTICES):
     mean_edge = 0
     max_edge = 0
     min_edge = 1000000000000
-    
+    counter_edges = 0
     initial_time = time.time()
     for i in range(1, NUMBER_OF_VERTICES+1):
 
@@ -26,12 +26,15 @@ def read_edges(hg, NUMBER_OF_VERTICES):
         
         max_edge = max(max_edge, (time_after_edge_1 - time_before_edge_1)/len(edges["edges"]))
         min_edge = min(min_edge, (time_after_edge_1 - time_before_edge_1)/len(edges["edges"]))
-        mean_edge += (time_after_edge_1 - time_before_edge_1)/len(edges["edges"])
+        
+        mean_edge += time_after_edge_1 - time_before_edge_1
+        
+        counter_edges += len(edges["edges"])
 
     return {
-        "mean_edge": mean_edge,
-        "max_edge": max_edge,
-        "min_edge": min_edge,
+        "mean": mean_edge/counter_edges,
+        "max": max_edge,
+        "min": min_edge,
         "total_time": time.time() - initial_time
     }
 
@@ -58,9 +61,9 @@ def read_vertices(hg, NUMBER_OF_VERTICES):
         mean_vertex += time_after_vertex_1 - time_before_vertex_1
 
     return {
-        "mean_vertex": mean_vertex/counter,
-        "max_vertex": max_vertex,
-        "min_vertex": min_vertex,
+        "mean": mean_vertex/counter,
+        "max": max_vertex,
+        "min": min_vertex,
         "total_time": time.time() - initial_time
     }
 
@@ -192,7 +195,7 @@ def read_edges_gremlin(graph_name="node_10", Nodes=10, sync=True):
     min_ = 1e1000
     max_ = 0
     mean_ = 0
-
+    total_size = 0
     counter = 0
     for vertex in range(1, Nodes + 1):
         before_time = time.time()
@@ -203,7 +206,9 @@ def read_edges_gremlin(graph_name="node_10", Nodes=10, sync=True):
         
             min_ = min(min_, ti / len(result))
             max_ = max(max_, ti / len(result))
-            mean_ += ti / len(result)
+            mean_ += ti 
+
+            total_size += len(result)
     
     if not sync:
         init = Nodes
@@ -222,7 +227,7 @@ def read_edges_gremlin(graph_name="node_10", Nodes=10, sync=True):
     
     return {
         "min": min_,
-        "mean": mean_, 
+        "mean": mean_ / total_size, 
         "max": max_, 
         "total_time": total
     }

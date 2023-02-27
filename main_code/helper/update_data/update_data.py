@@ -37,9 +37,9 @@ def update_edges(hg, NUMBER_OF_VERTICES):
             mean_edge += time_after_edge_1 - time_before_edge_1
 
     return {
-        "mean_edge": mean_edge/counter,
-        "max_edge": max_edge,
-        "min_edge": min_edge,
+        "mean": mean_edge/counter,
+        "max": max_edge,
+        "min": min_edge,
         "total_time": time.time() - initial_time
     }
 
@@ -68,9 +68,9 @@ def update_vertices(hg, NUMBER_OF_VERTICES):
         mean_vertex += time_after_vertex_1 - time_before_vertex_1
 
     return {
-        "mean_vertex": mean_vertex/counter,
-        "max_vertex": max_vertex,
-        "min_vertex": min_vertex,
+        "mean": mean_vertex/counter,
+        "max": max_vertex,
+        "min": min_vertex,
         "total_time": time.time() - initial_time
     }
 
