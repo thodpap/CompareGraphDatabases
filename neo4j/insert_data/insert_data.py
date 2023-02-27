@@ -20,18 +20,66 @@ def insert_edges(person_name1, person_name2, driver):
         session.write_transaction(insert_edges_, person_name1, person_name2)
 
 def insert_all_data(lines, driver):
+
+    from time import time
+
+    min_edges = 1000000
+    max_edges = 0
+    mean_edges = 0
+    counter_edges = 2*(len(lines) - 2)
+
+    min_vertices = 1000000
+    max_vertices = 0
+    mean_vertices = 0
+    counter_vertices = 0
+
     vertex_set = set()
     for line in lines: 
         
         vertex1 ,vertex2 = line.strip("\n").split(" ")
         
         if vertex1 not in  vertex_set:
+            counter_vertices+=1
             vertex_set.add(vertex1)
+            time_before = time()
             insert_vertex(vertex1, driver=driver)
+            time_after = time()
+            diff = time_after - time_before
+            max_vertices = max(max_vertices, diff)
+            min_vertices = min(min_vertices, diff)
+            mean_vertices += diff
         
-        if vertex2 not in vertex_set: 
+        if vertex2 not in vertex_set:
+            counter_vertices+=1
             vertex_set.add(vertex2)
+            time_before = time()
             insert_vertex(vertex2, driver=driver)
+            time_after = time()
+            diff = time_after - time_before
+            max_vertices = max(max_vertices, diff)
+            min_vertices = min(min_vertices, diff)
+            mean_vertices += diff
         
+        time_before = time()
         insert_edges(vertex1, vertex2, driver=driver)
+        time_after = time()
+        diff = time_after - time_before
+        max_edges = max(max_edges, diff)
+        min_edges = min(min_edges, diff)
+        mean_edges += diff
+
+    return {
+        "edges":{
+            "min": min_edges,
+            "max": max_edges,
+            "mean": mean_edges/counter_edges,
+            "total_time": mean_edges
+        },
+        "vertices":{
+            "min": min_vertices,
+            "max": max_vertices,
+            "mean": mean_vertices/counter_vertices,
+            "total_time": mean_vertices
+        }
+    }  
     
