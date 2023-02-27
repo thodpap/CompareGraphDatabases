@@ -318,7 +318,7 @@ def batch_inset_edges(hg, lines, NUMBER_OF_VERTICES, batch=None, percentage=None
     return {
         "max":max_edge,
         "min":min_edge,
-        "mean":mean_edge/length
+        "mean":mean_edge/(2*length)
     } 
 
 def batch_insert(hg, lines, NUMBER_OF_VERTICES, batch_vertices=None, batch_edges=None, percentage=None):
