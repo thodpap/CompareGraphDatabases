@@ -1,5 +1,3 @@
-
-
 def traverser_shortest_path(hg, source, target, direction="BOTH", max_depth=10, label=""):
 
     import time 

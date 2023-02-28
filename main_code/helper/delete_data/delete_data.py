@@ -5,7 +5,7 @@ deletes all the edges and vertices from the graph.
 '''
 
 
-def delete_edges(hg, NUMBER_OF_VERTICES):
+def delete_edges(hg, NUMBER_OF_VERTICES, direction="OUT"):
 
     import time
     
@@ -14,13 +14,15 @@ def delete_edges(hg, NUMBER_OF_VERTICES):
     mean_edge = 0
     max_edge = 0
     min_edge = 1000000000000
-    
+    print(direction)
     initial_time = time.time()
     for i in range(1, NUMBER_OF_VERTICES+1):
 
         
         edges = eval(hg.get_edge_by_condition(vertex_id=f"\"1:{i}\"", direction="OUT", label="relationship").response)
-
+        if i == 23:
+            print(len(edges["edges"]), direction)
+            print(edges["edges"])
         data_ = edges["edges"]
         counter += len(data_)
    
@@ -34,6 +36,27 @@ def delete_edges(hg, NUMBER_OF_VERTICES):
             max_edge = max(max_edge, time_after_edge_1 - time_before_edge_1)
             min_edge = min(min_edge, time_after_edge_1 - time_before_edge_1)
             mean_edge += time_after_edge_1 - time_before_edge_1
+
+        if direction == "BOTH":
+            edges = eval(hg.get_edge_by_condition(vertex_id=f"\"1:{i}\"", direction="IN", label="relationship").response)
+            if i == 23:
+                print(len(edges["edges"]), direction)
+                print(edges["edges"])
+            data_ = edges["edges"]
+            counter += len(data_)
+    
+            for edge in data_:
+                            
+                id = edge['id']
+                time_before_edge_1 = time.time()
+                res = hg.delete_edge_by_id(id)
+                assert res.status_code == 204, "Could not delete edge " + id + f" with error {res.response}."
+                time_after_edge_1 = time.time()
+                max_edge = max(max_edge, time_after_edge_1 - time_before_edge_1)
+                min_edge = min(min_edge, time_after_edge_1 - time_before_edge_1)
+                mean_edge += time_after_edge_1 - time_before_edge_1
+
+
        
 
     return {
@@ -58,13 +81,16 @@ def delete_vertices(hg, NUMBER_OF_VERTICES):
     initial_time = time.time()
     for i in range(1, NUMBER_OF_VERTICES+1):
 
-        time_before_vertex_1 = time.time()
-        res = hg.delete_vertex_by_id(vertex_id=f"1:{i}")
-        assert res.status_code == 204, f"Could not delete vertex {i} with error {res.response}." 
-        time_after_vertex_1 = time.time()
-        max_vertex = max(max_vertex, time_after_vertex_1 - time_before_vertex_1)
-        min_vertex = min(min_vertex, time_after_vertex_1 - time_before_vertex_1)
-        mean_vertex += time_after_vertex_1 - time_before_vertex_1
+        try:
+            time_before_vertex_1 = time.time()
+            res = hg.delete_vertex_by_id(vertex_id=f"1:{i}")
+            assert res.status_code == 204, f"Could not delete vertex {i} with error {res.response}." 
+            time_after_vertex_1 = time.time()
+            max_vertex = max(max_vertex, time_after_vertex_1 - time_before_vertex_1)
+            min_vertex = min(min_vertex, time_after_vertex_1 - time_before_vertex_1)
+            mean_vertex += time_after_vertex_1 - time_before_vertex_1
+        except Exception as e:
+            continue
 
     return {
         "mean": mean_vertex/counter,
@@ -74,9 +100,9 @@ def delete_vertices(hg, NUMBER_OF_VERTICES):
     }
 
 
-def delete_data(hg, NUMBER_OF_vertices):
+def delete_data(hg, NUMBER_OF_vertices, direction="OUT"):
 
-    edges = delete_edges(hg, NUMBER_OF_vertices)
+    edges = delete_edges(hg, NUMBER_OF_VERTICES=NUMBER_OF_vertices, direction=direction)
     vertices = delete_vertices(hg, NUMBER_OF_vertices)
     return {
         "edges":edges,

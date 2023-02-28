@@ -20,7 +20,10 @@ if __name__ == "__main__":
     hg = PyHugeGraphClient.HugeGraphClient("http://localhost", "8081", args.graph_name)
     
     if args.method == 0:
-        print("Basic delete", delete_data.delete_data(hg, vertices))
+        # print("Basic delete", hg.delete_vertex_by_id(vertex_id="1:23").response)
+        print("Basic delete", delete_data.delete_data(hg, NUMBER_OF_vertices=100, direction="BOTH"))
+        # print("Basic delete", delete_data.delete_edges(hg, NUMBER_OF_VERTICES=30, direction="BOTH"))
+        # print("Basic delete", delete_data.delete_vertices(hg, NUMBER_OF_VERTICES=30))
     elif args.method == 1:
         print("Gremlin delete all together", delete_data.delete_gremlin_alltogether(args.graph_name, vertices))
     elif args.method == 2:
