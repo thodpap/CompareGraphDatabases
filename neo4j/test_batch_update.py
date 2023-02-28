@@ -1,4 +1,4 @@
-import batch_insert
+import batch_update
 from neo4j import GraphDatabase
 
 
@@ -10,11 +10,11 @@ driver = GraphDatabase.driver(uri, auth=(username, password))
 file1 = open("node_100.txt", 'r')
 lines = file1.readlines()[2:]
 
-
-batch_insert.batch_in_nodes(100, 10 , driver)
-#print(list1)
-batch_insert.batch_in_edges(lines, 100, driver)
-
-
+batch_update.batch_update_n(100, 10, driver)
+batch_update.update_update_e(lines, 100, driver)
 
 driver.close()
+
+
+
+

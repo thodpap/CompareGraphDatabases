@@ -23,6 +23,7 @@ def batch_insert_in_rels(insert_rels, driver):
 
 def batch_in_nodes(number_of_vertices, batch_size, driver):
     import random
+    batched_list1 =[]
     for i in range(1, number_of_vertices, batch_size):
     
         batched_list = []
@@ -31,8 +32,10 @@ def batch_in_nodes(number_of_vertices, batch_size, driver):
             batch['name'] = str(j)
             batch['age'] = str(random.randint(1,100))
             batched_list.append(batch)
+        batched_list1.append(batched_list)
         
         batch_insert_nodes(batched_list, driver)
+   
 
 def batch_in_edges(number_of_edges, batch_size, driver):
     import random
