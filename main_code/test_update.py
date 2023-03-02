@@ -32,7 +32,7 @@ if __name__ == "__main__":
         print("basic update", update_data.update_data(hg, vertices))
         print("Gremlin update", update_data.update_gremlin(args.graph_name, vertices))
     elif args.method == 3:
-        print("basic update", update_data.batch_update(hg=hg, lines=lines, NUMBER_OF_VERTICES=vertices, batch_vertices=500, batch_edges=250, percentage=None))
+        print("basic update", update_data.batch_update(hg=hg, lines=lines[2:100002], NUMBER_OF_VERTICES=10000, batch_vertices=200, batch_edges=50, percentage=None))
     else:
         raise TypeError("Wrong method")
 

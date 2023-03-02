@@ -24,10 +24,13 @@ def read_edges(hg, NUMBER_OF_VERTICES):
         edges = eval(res.response)
         time_after_edge_1 = time.time()
         
-        max_edge = max(max_edge, (time_after_edge_1 - time_before_edge_1)/len(edges["edges"]))
-        min_edge = min(min_edge, (time_after_edge_1 - time_before_edge_1)/len(edges["edges"]))
-        
-        mean_edge += time_after_edge_1 - time_before_edge_1
+        try:
+            max_edge = max(max_edge, (time_after_edge_1 - time_before_edge_1)/len(edges["edges"]))
+            min_edge = min(min_edge, (time_after_edge_1 - time_before_edge_1)/len(edges["edges"]))
+            
+            mean_edge += time_after_edge_1 - time_before_edge_1
+        except:
+            pass
         
         counter_edges += len(edges["edges"])
 
@@ -203,11 +206,14 @@ def read_edges_gremlin(graph_name="node_10", Nodes=10, sync=True):
         
         if sync:
             ti = time.time() - before_time
-        
-            min_ = min(min_, ti / len(result))
-            max_ = max(max_, ti / len(result))
-            mean_ += ti 
 
+            try:
+                min_ = min(min_, ti / len(result))
+                max_ = max(max_, ti / len(result))
+                mean_ += ti 
+            except:
+                pass 
+            
             total_size += len(result)
     
     if not sync:

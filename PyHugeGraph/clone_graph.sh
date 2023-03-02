@@ -1,1 +1,1 @@
-curl -X POST http://localhost:8080/graphs/$1?clone_graph_name=hugegraph
+curl -X POST http://localhost:8081/graphs/$1?clone_graph_name=hugegraph

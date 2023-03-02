@@ -14,15 +14,15 @@ def delete_edges(hg, NUMBER_OF_VERTICES, direction="OUT"):
     mean_edge = 0
     max_edge = 0
     min_edge = 1000000000000
-    print(direction)
+    # print(direction)
     initial_time = time.time()
     for i in range(1, NUMBER_OF_VERTICES+1):
 
         
         edges = eval(hg.get_edge_by_condition(vertex_id=f"\"1:{i}\"", direction="OUT", label="relationship").response)
-        if i == 23:
-            print(len(edges["edges"]), direction)
-            print(edges["edges"])
+        # if i == 23:
+        #     print(len(edges["edges"]), direction)
+        #     print(edges["edges"])
         data_ = edges["edges"]
         counter += len(data_)
    
@@ -39,9 +39,9 @@ def delete_edges(hg, NUMBER_OF_VERTICES, direction="OUT"):
 
         if direction == "BOTH":
             edges = eval(hg.get_edge_by_condition(vertex_id=f"\"1:{i}\"", direction="IN", label="relationship").response)
-            if i == 23:
-                print(len(edges["edges"]), direction)
-                print(edges["edges"])
+            # if i == 23:
+            #     print(len(edges["edges"]), direction)
+            #     print(edges["edges"])
             data_ = edges["edges"]
             counter += len(data_)
     

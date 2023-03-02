@@ -822,7 +822,7 @@ class HugeGraphClient(object):
         if label != "":
             para = para + "&label=" + label
         if nearest != "":
-            para = para + "&nearest=" + label
+            para = para + "&nearest=" + nearest
 
         url = url + para[1:]
         response = requests.get(url, headers=self.headers)
