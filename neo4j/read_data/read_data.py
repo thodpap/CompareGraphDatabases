@@ -8,7 +8,7 @@ def read_vertex(person_name, driver):
 
 def read_out_edges_of_vertex(person_name, driver):
     def read_out_edges_of_vertex_(tx, person_name):
-        q2 = "MATCH (n:Person{name:$name})-[r:Knows]->(b:Person) RETURN  r"
+        q2 = "MATCH (n:Person{name:$name})-[r:KNOWS]->(b:Person) RETURN  r"
         return len(list(tx.run(q2, name=str(person_name))))
     with driver.session() as session:
         return session.read_transaction(read_out_edges_of_vertex_, person_name)

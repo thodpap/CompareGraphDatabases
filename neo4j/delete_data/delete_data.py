@@ -1,13 +1,13 @@
 def delete_out_edges(person_name, driver):
     def delete_out_edges_(tx, person_name):
-        q2 = "MATCH (n:Person{name:$name})-[r:Knows]->() DELETE r RETURN r" 
+        q2 = "MATCH (n:Person{name:$name})-[r:KNOWS]->() DELETE r RETURN r" 
         return len(list(tx.run(q2, name=str(person_name))))
     with driver.session() as session:
         return session.write_transaction(delete_out_edges_, person_name)
 
 def delete_in_edges(person_name, driver):
     def delete_in_edges_(tx, person_name):
-        q3 =  "MATCH (n:Person{name:$name}) <-[r:Knows]-() DELETE r RETURN r" 
+        q3 =  "MATCH (n:Person{name:$name}) <-[r:KNOWS]-() DELETE r RETURN r" 
         return len(list(tx.run(q3, name=str(person_name))))
     with driver.session() as session:
         return session.write_transaction(delete_in_edges_, person_name)
@@ -52,7 +52,6 @@ def delete_k_vertices_and_edges(k, driver):
 
         time_before_edge = time()
         counter = delete_out_edges(i, driver=driver)
-        print(counter)
         counter_edges += counter
         time_after_edge = time()
         diff = time_after_edge - time_before_edge
@@ -63,7 +62,6 @@ def delete_k_vertices_and_edges(k, driver):
 
         time_before_edges = time()
         counter = delete_in_edges(i, driver=driver)
-        print(counter)
         counter_edges += counter
         time_after_edges = time()
         diff = time_after_edges - time_before_edges
