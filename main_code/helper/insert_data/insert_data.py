@@ -244,7 +244,8 @@ def batch_insert_vertices(hg, NUMBER_OF_VERTICES, batch=None, percentage=None):
             }
             batched_list.append(data_)
         time_before_batch = time.time()
-        hg.create_multi_vertex(data=batched_list)
+        res = hg.create_multi_vertex(data=batched_list)
+        assert res.status_code != 400, f"Could not insert vertices batch: {batched_list} with error {res.response}"
         time_after_batch = time.time()
         
         b = min(NUMBER_OF_VERTICES + 1 - i, batch)
@@ -279,7 +280,7 @@ def batch_inset_edges(hg, lines, NUMBER_OF_VERTICES, batch=None, percentage=None
     
     for i in tqdm(range(2, len(lines), batch), desc = 'tqdm() Progress Bar'):
         batched_list = []
-        for j in range(i, min(i+ batch, length)):
+        for j in range(i, min(i + batch, length)):
             line = lines[j]
             line = line.replace("\n","")
             vertex_1, vertex_2 = line.split(" ")    
@@ -309,7 +310,8 @@ def batch_inset_edges(hg, lines, NUMBER_OF_VERTICES, batch=None, percentage=None
             batched_list.append(data_)
         
         time_before_edge_1 = time.time()
-        hg.create_multi_edge(batched_list)
+        res = hg.create_multi_edge(batched_list)
+        assert res.status_code != 400, f"Could not insert edge batch: {batched_list} with error {res.response}"
         time_after_edge_1 = time.time()
 
         b = min(length - i, batch)

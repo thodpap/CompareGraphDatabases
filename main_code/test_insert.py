@@ -32,7 +32,7 @@ if __name__ == "__main__":
         print("basic insert", insert_data.insert_data(lines, hg))
         print("gremlin insert", insert_data.insert_data_gremlin(graph_name=args.graph_name, lines=lines, NUMBER_OF_VERTICES=vertices))
     elif args.method == 3:
-        print("batch insert", insert_data.batch_insert(hg=hg, lines=lines, NUMBER_OF_VERTICES=vertices, batch_vertices=200, batch_edges=250))
+        print("batch insert", insert_data.batch_insert(hg=hg, lines=lines, NUMBER_OF_VERTICES=vertices, batch_vertices=200, batch_edges=50))
     else:
         file.close()
         raise TypeError("Wrong method")
