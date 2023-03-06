@@ -25,13 +25,14 @@ def batch_update_n(number_of_vertices, batch_size, driver):
     
     import random
     from time import time
+    from tqdm import tqdm
 
     min_vertices = 1000000
     max_vertices = 0
     mean_vertices = 0
     counter_vertices = number_of_vertices
 
-    for i in range(1, number_of_vertices+1, batch_size):
+    for i in tqdm(range(1, number_of_vertices+1, batch_size), desc = 'tqdm() Progress Bar'):
 
         batched_list =  []
         temp_counter = 0
@@ -61,6 +62,7 @@ def batch_update_e(lines, batch_size, driver):
     
     import random
     from time import time
+    from tqdm import tqdm 
 
     length = len(lines)
 
@@ -76,7 +78,7 @@ def batch_update_e(lines, batch_size, driver):
         vertices_rels.append((vertex1,vertex2))
 
     
-    for i in range(0, length, batch_size):
+    for i in tqdm(range(0, length, batch_size), desc = 'tqdm() Progress Bar'):
 
         batched_list = []
         temp_counter = 0

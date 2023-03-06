@@ -32,6 +32,7 @@ def update_out_edges(person_name, driver):
 def update_all_data(n, driver):
 
     from time import time
+    from tqdm import tqdm
 
     min_edges = 1000000
     max_edges = 0
@@ -43,7 +44,7 @@ def update_all_data(n, driver):
     mean_vertices = 0
     counter_vertices = n
 
-    for i in range(1, n+1):
+    for i in tqdm(range(1, n+1), desc = 'tqdm() Progress Bar'):
 
         time_before_vertex = time()
         update_vertex(i, driver)

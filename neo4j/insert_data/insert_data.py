@@ -22,6 +22,7 @@ def insert_edges(person_name1, person_name2, driver):
 def insert_all_data(lines, driver):
 
     from time import time
+    from tqdm import tqdm
 
     min_edges = 1000000
     max_edges = 0
@@ -34,7 +35,7 @@ def insert_all_data(lines, driver):
     counter_vertices = 0
 
     vertex_set = set()
-    for line in lines: 
+    for line in tqdm(lines, desc = 'tqdm() Progress Bar'):
         
         vertex1 ,vertex2 = line.strip("\n").split(" ")
         

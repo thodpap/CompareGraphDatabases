@@ -37,6 +37,7 @@ def delete_allnodes(driver):
 def delete_k_vertices_and_edges(k, driver):
     
     from time import time
+    from tqdm import tqdm
 
     min_edges = 1000000
     max_edges = 0
@@ -48,7 +49,7 @@ def delete_k_vertices_and_edges(k, driver):
     mean_vertices = 0
     counter_vertices = k
 
-    for i in range(1, k+1):
+    for i in tqdm(range(1, k+1), desc = 'tqdm() Progress Bar'):
 
         time_before_edge = time()
         counter = delete_out_edges(i, driver=driver)

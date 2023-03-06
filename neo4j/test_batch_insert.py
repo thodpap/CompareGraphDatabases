@@ -2,12 +2,12 @@ import batch_insert
 from neo4j import GraphDatabase
 
 
-uri = "bolt://localhost:7687"
+uri = "bolt://localhost:7690"
 username = "neo4j"
-password = "node_100node_100"
+password = "node_10node_10"
 driver = GraphDatabase.driver(uri, auth=(username, password))
 
-file1 = open("node_100.txt", 'r')
+file1 = open("node_10.txt", 'r')
 lines = file1.readlines()[2:]
 
 
@@ -15,7 +15,6 @@ lines = file1.readlines()[2:]
 # print(list1)
 # batch_insert.batch_in_edges(lines, 100, driver)
 
-print(batch_insert.batch_insert(number_of_vertices=100, batch_size_vertices=1000, lines=lines, batch_size_edges=1000, driver=driver))
-
+print(batch_insert.batch_insert(number_of_vertices=10, batch_size_vertices=1000, lines=lines, batch_size_edges=1000, driver=driver))
 
 driver.close()

@@ -25,6 +25,7 @@ def batch_in_nodes(number_of_vertices, batch_size, driver):
     
     import random
     from time import time
+    from tqdm import tqdm
 
     min_vertices = 1000000
     max_vertices = 0
@@ -32,7 +33,7 @@ def batch_in_nodes(number_of_vertices, batch_size, driver):
     counter_vertices = number_of_vertices
 
     batched_list1 =[]
-    for i in range(1, number_of_vertices, batch_size):
+    for i in tqdm(range(1, number_of_vertices, batch_size), desc = 'tqdm() Progress Bar'):
     
         batched_list = []
         temp_counter = 0
@@ -64,6 +65,7 @@ def batch_in_edges(lines, batch_size, driver):
     
     import random
     from time import time
+    from tqdm import tqdm
 
     length = len(lines)
 
@@ -77,7 +79,7 @@ def batch_in_edges(lines, batch_size, driver):
         vertex1, vertex2 = line.strip("\n").split(" ")
         vertices_rels.append((vertex1,vertex2))
 
-    for i in range(0, length, batch_size):
+    for i in tqdm(range(0, length, batch_size), desc = 'tqdm() Progress Bar'):
         
         batched_list = []
         temp_counter = 0
